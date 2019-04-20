@@ -7,9 +7,11 @@ import com.smartgreen.model.Event;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class InterpolationProcessor implements Processor<String, Event> {
+
+    public static final String NAME = "interpolation-processor";
+
     private ProcessorContext context; // 可以的得到流处理的上下文，init()函数中必须赋值
 
-    // 在构造函数中使用该值给processor命名，可能程序使用到并行模型？多个processor一起工作
     private static final AtomicInteger counter = new AtomicInteger(1);
 
     private String processorName;
