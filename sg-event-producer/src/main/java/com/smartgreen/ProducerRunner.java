@@ -14,13 +14,13 @@ import java.util.concurrent.ExecutionException;
 
 public class ProducerRunner {
 
-    public static final String IP = "http://127.0.0.1";
+    private static final String IP = "http://127.0.0.1";
 
-    public static final String SERVER = IP + ":9092";
+    private static final String SERVER = IP + ":9092";
 
-    public static final String INPUT_TOPIC = "test-event-input-topic";
+    private static final String INPUT_TOPIC = "test-event-input-topic";
 
-    public static final String SCHEMA_URL = IP + ":8081";
+    private static final String SCHEMA_URL = IP + ":8081";
 
     /**
      * kafka producer 的配置
@@ -50,12 +50,9 @@ public class ProducerRunner {
         long timestamp = System.currentTimeMillis();
         event.setTimestamp(timestamp);
         event.setLastsent(timestamp + 20000);
-
         Map<CharSequence, CharSequence> values = new HashMap<CharSequence, CharSequence>();
         values.put("000", "120");
-        values.put("001", "26.5");
         event.setValues(values);
-
         return event;
     }
 
@@ -71,7 +68,6 @@ public class ProducerRunner {
             int num = 20;
             for (int i = 0; i < num; i++) {
                 Event event = nextExtendedEvent();
-
                 ProducerRecord<String, Event> record = new ProducerRecord<>(INPUT_TOPIC, "test", event);
                 RecordMetadata metaData = producer.send(record).get();
                 // 消息发送情况
@@ -85,6 +81,5 @@ public class ProducerRunner {
         } finally {
             producer.close();
         }
-
     }
 }

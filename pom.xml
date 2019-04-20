@@ -20,6 +20,7 @@
     <modules>
         <module>sg-streams-engine</module>
         <module>sg-event-producer</module>
+        <module>sg-event-consumer</module>
     </modules>
 
     <repositories>

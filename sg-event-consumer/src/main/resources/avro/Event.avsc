@@ -1,0 +1,12 @@
+{"namespace": "com.smartgreen.model",
+  "type": "record",
+  "name": "Event",
+  "doc": "This is Event POJO",
+  "fields": [
+    {"name": "deviceConfigId", "type": "string"},
+    {"name": "deviceProtocolId", "type": "string"},
+    {"name": "eventId", "type": "string"},
+    {"name": "timestamp",  "type": "long"},
+    {"name": "values",  "type": { "type": "map", "values" : "string" }}
+  ]
+}
