@@ -19,6 +19,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>sg-streams-engine</module>
+        <module>sg-event-producer</module>
     </modules>
 
     <repositories>
