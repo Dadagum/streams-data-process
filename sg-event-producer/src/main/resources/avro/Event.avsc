@@ -1,4 +1,4 @@
-{"namespace": "com.smartgreen.model",
+{"namespace": "com.micer.core.event.Event",
   "type": "record",
   "name": "Event",
   "doc": "This is Event POJO",

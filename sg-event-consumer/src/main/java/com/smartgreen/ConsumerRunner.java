@@ -1,6 +1,6 @@
 package com.smartgreen;
 
-import com.smartgreen.model.Event;
+import com.micer.core.model.Event.Event;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -18,7 +18,8 @@ public class ConsumerRunner {
 
     private static final String groupId = "test-group";
 
-    private static final String TOPIC = "yzemetor-test2";
+    //private static final String TOPIC = "yzemetor-test2";
+    private static final String TOPIC = "test-event-input-topic";
 
     private static final Properties props = new Properties();
 
@@ -39,6 +40,7 @@ public class ConsumerRunner {
 
 
     public static void main(String[] args) {
+        System.out.println("consumer start...");
         KafkaConsumer<String, Event> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList(TOPIC));
 

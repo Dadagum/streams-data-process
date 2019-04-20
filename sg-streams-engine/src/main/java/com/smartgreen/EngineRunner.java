@@ -6,7 +6,6 @@ import com.smartgreen.common.SerdesUtils;
 import com.smartgreen.processor.InterpolationProcessor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
@@ -35,7 +34,7 @@ public class EngineRunner {
         builder.addProcessor(InterpolationProcessor.NAME, new ProcessorSuppliers.InterpolationProcessorSupplier(), "Source");
         // sink节点的key，value反序列化设置
         // 增加sink processor
-        builder.addSink("Sink", Constant.OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), InterpolationProcessor.NAME);
+        //builder.addSink("Sink", Constant.OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), InterpolationProcessor.NAME);
 
         // 根据已经创建完的拓扑结构和配置开启streams程序
         final KafkaStreams streams = new KafkaStreams(builder, props);

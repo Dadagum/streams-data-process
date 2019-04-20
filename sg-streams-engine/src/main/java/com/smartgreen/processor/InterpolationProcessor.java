@@ -1,8 +1,9 @@
 package com.smartgreen.processor;
 
+import com.micer.core.event.Event.Event;
 import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorContext;
-import com.smartgreen.model.Event;
+import org.apache.kafka.streams.state.KeyValueStore;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -15,6 +16,8 @@ public class InterpolationProcessor implements Processor<String, Event> {
     private static final AtomicInteger counter = new AtomicInteger(1);
 
     private String processorName;
+
+    private KeyValueStore<String, Event> datastore;
 
     public InterpolationProcessor(String name) {
         this.processorName = name + "-" + counter.getAndIncrement();

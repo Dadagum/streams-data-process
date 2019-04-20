@@ -1,6 +1,6 @@
 package com.smartgreen.common;
 
-import com.smartgreen.model.Event;
+import com.micer.core.event.Event.Event;
 import com.smartgreen.processor.InterpolationProcessor;
 import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorSupplier;

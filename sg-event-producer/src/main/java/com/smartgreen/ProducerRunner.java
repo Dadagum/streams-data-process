@@ -1,7 +1,6 @@
 package com.smartgreen;
 
-import com.smartgreen.model.Event;
-import com.smartgreen.model.ExtendedEvent;
+import com.micer.core.event.Event.Event;
 import com.smartgreen.utils.UUIDUtils;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -42,14 +41,13 @@ public class ProducerRunner {
      * 模拟生成一个Event
      * @return
      */
-    private static Event nextExtendedEvent() {
-        ExtendedEvent event = new ExtendedEvent();
+    private static Event nextEvent() {
+        Event event = new Event();
         event.setEventId(UUIDUtils.get());
         event.setDeviceConfigId("QT001");
         event.setDeviceProtocolId("011001");
         long timestamp = System.currentTimeMillis();
         event.setTimestamp(timestamp);
-        event.setLastsent(timestamp + 20000);
         Map<CharSequence, CharSequence> values = new HashMap<CharSequence, CharSequence>();
         values.put("000", "120");
         event.setValues(values);
@@ -67,7 +65,7 @@ public class ProducerRunner {
         try {
             int num = 20;
             for (int i = 0; i < num; i++) {
-                Event event = nextExtendedEvent();
+                Event event = nextEvent();
                 ProducerRecord<String, Event> record = new ProducerRecord<>(INPUT_TOPIC, "test", event);
                 RecordMetadata metaData = producer.send(record).get();
                 // 消息发送情况
