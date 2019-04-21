@@ -5,6 +5,7 @@ import com.smartgreen.common.ProcessorSuppliers;
 import com.smartgreen.common.SerdesUtils;
 import com.smartgreen.processor.InterpolationProcessor;
 import com.smartgreen.processor.Measure2ManageProcessor;
+import com.smartgreen.processor.Min15StatisticsProcessor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -36,14 +37,19 @@ public class EngineRunner {
         // 建立拓扑结构
         // 插值处理
         builder.addProcessor(InterpolationProcessor.NAME, new ProcessorSuppliers.InterpolationProcessorSupplier(), "Source");
-        // 调试阶段使用inMemoryKeyValueStore
         builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(InterpolationProcessor.DATASTORE), Serdes.String(), SerdesUtils.createEventSerde()), InterpolationProcessor.NAME);
 
         // 转为管理实体
         builder.addProcessor(Measure2ManageProcessor.NAME, new ProcessorSuppliers.Measure2ManageProcessorSupplier(), InterpolationProcessor.NAME);
 
+        // 每15min统计一次能耗
+        builder.addProcessor(Min15StatisticsProcessor.NAME, new ProcessorSuppliers.Min15StatisticsProcessorSupplier(), Measure2ManageProcessor.NAME);
+        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(Min15StatisticsProcessor.DATASTORE), Serdes.String(), SerdesUtils.createEventSerde()), Min15StatisticsProcessor.NAME);
+
         // 记录“原始”数据topic
-        builder.addSink("Sink", Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), Measure2ManageProcessor.NAME);
+        builder.addSink("Sink_Raw", Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), Measure2ManageProcessor.NAME);
+        // 统计完能耗数据的topic
+        builder.addSink("Sink_15Min", Constant.MIN_15_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), Min15StatisticsProcessor.NAME);
 
 
         // 根据已经创建完的拓扑结构和配置开启streams程序

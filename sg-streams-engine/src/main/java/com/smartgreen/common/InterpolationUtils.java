@@ -18,11 +18,11 @@ public class InterpolationUtils {
         Utf8 key = new Utf8("000");
         int preV = Integer.parseInt(start.getValues().get(key).toString());
         int currV = Integer.parseInt(end.getValues().get(key).toString());
-        System.out.println("delta = " + (end.getTimestamp() - start.getTimestamp()));
+        //System.out.println("delta = " + (end.getTimestamp() - start.getTimestamp()));
         int cnt = Math.toIntExact((end.getTimestamp() - start.getTimestamp()) / Constant.INTERVAL);
         if (cnt != 0) {
             int deltaValue = (currV - preV) / cnt;
-            System.out.println("pre = " + preV + ", currV = " + currV + ", cnt = " + cnt);
+            //System.out.println("pre = " + preV + ", currV = " + currV + ", cnt = " + cnt);
             for (int i = 1; i < cnt; i++) {
                 Event event = new Event();
                 event.setDeviceConfigId(start.getDeviceConfigId());
@@ -31,7 +31,7 @@ public class InterpolationUtils {
                 event.setEventId(start.getEventId());
                 Map<CharSequence, CharSequence> map = new HashMap<>();
                 int value = preV + deltaValue * i;
-                map.put("000", value + "");
+                map.put(key, value + "");
                 event.setValues(map);
                 result.add(event);
             }

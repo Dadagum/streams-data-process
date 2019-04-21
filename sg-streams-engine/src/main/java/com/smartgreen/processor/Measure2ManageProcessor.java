@@ -41,9 +41,9 @@ public class Measure2ManageProcessor implements Processor<String, Event> {
             event.setValues(curr.getValues());
             event.setTimestamp(curr.getTimestamp());
             event.setDeviceProtocolId(curr.getDeviceProtocolId());
-            event.setDeviceConfigId(curr.getDeviceConfigId());
+            event.setDeviceConfigId(entity.getUuid());
 
-            context.forward(entity.getUuid(), event);
+            context.forward(s, event);
         }
         context.commit();
     }

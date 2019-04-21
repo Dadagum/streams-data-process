@@ -7,9 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 public class ConsumerRunner {
 
@@ -21,8 +19,8 @@ public class ConsumerRunner {
 
     private static final String groupId = "hongda-group";
 
-    private static final String TOPIC = "test-event-output-topic";
-    //private static final String TOPIC = "test-event-input-topic";
+   // private static final String TOPIC = "test-event-output-topic";
+    private static final String TOPIC = "min-15-output-topic";
 
     private static final Properties props = new Properties();
 

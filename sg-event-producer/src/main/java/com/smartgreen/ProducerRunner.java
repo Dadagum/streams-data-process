@@ -17,7 +17,7 @@ public class ProducerRunner {
 
     private static final String SERVER = IP + ":9092";
 
-    private static final String INPUT_TOPIC = "test-event-input-topic";
+    private static final String INPUT_TOPIC = "test-event-input-topic2";
 
     private static final String SCHEMA_URL = IP + ":8081";
 

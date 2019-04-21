@@ -47,7 +47,7 @@ public class InterpolationProcessor implements Processor<String, Event> {
             }
         }
         dataStore.put(deviceId, curr);
-        context.forward(deviceId, curr);
+        context.forward(s, curr);
         context.commit();
     }
 
