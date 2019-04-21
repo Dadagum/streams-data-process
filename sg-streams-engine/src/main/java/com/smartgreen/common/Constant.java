@@ -12,12 +12,20 @@ public class Constant {
 
     public static final String INPUT_TOPIC = "test-event-input-topic";
 
-    public static final String OUTPUT_TOPIC = "test-event-output-topic";
+    /**
+     * 记录“原始数据”的topic
+     */
+    public static final String RAW_OUTPUT_TOPIC = "test-event-output-topic";
+
+    /**
+     * 记录分时后的topic
+     */
+    public static final String MIN_15_TOPIC = "min-15-output-topic";
 
     public static final String SCHEMA_URL = IP + ":8081";
 
     /**
      * 采集程序间隔：１5min
      */
-    public static final int INTERVAL = 90000;
+    public static final int INTERVAL = 900000;
 }

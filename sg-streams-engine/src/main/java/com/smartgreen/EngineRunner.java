@@ -4,6 +4,7 @@ import com.smartgreen.common.Constant;
 import com.smartgreen.common.ProcessorSuppliers;
 import com.smartgreen.common.SerdesUtils;
 import com.smartgreen.processor.InterpolationProcessor;
+import com.smartgreen.processor.Measure2ManageProcessor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -37,7 +38,13 @@ public class EngineRunner {
         builder.addProcessor(InterpolationProcessor.NAME, new ProcessorSuppliers.InterpolationProcessorSupplier(), "Source");
         // 调试阶段使用inMemoryKeyValueStore
         builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(InterpolationProcessor.DATASTORE), Serdes.String(), SerdesUtils.createEventSerde()), InterpolationProcessor.NAME);
-        builder.addSink("Sink", Constant.OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), InterpolationProcessor.NAME);
+
+        // 转为管理实体
+        builder.addProcessor(Measure2ManageProcessor.NAME, new ProcessorSuppliers.Measure2ManageProcessorSupplier(), InterpolationProcessor.NAME);
+
+        // 记录“原始”数据topic
+        builder.addSink("Sink", Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), Measure2ManageProcessor.NAME);
+
 
         // 根据已经创建完的拓扑结构和配置开启streams程序
         final KafkaStreams streams = new KafkaStreams(builder, props);
@@ -47,5 +54,6 @@ public class EngineRunner {
         // Start the Kafka Streams threads
         streams.start();
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+
     }
 }
