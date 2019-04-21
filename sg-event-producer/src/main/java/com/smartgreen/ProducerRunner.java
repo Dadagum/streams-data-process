@@ -49,7 +49,7 @@ public class ProducerRunner {
         long timestamp = System.currentTimeMillis();
         event.setTimestamp(timestamp);
         Map<CharSequence, CharSequence> values = new HashMap<CharSequence, CharSequence>();
-        values.put("000", "120");
+        values.put("000", "000100");
         event.setValues(values);
         return event;
     }
@@ -59,14 +59,20 @@ public class ProducerRunner {
      * @param args
      */
     public static void main(String[] args) {
-
         // 生产者配置
         KafkaProducer<String, Event> producer = new KafkaProducer<>(props);
         try {
-            int num = 20;
-            for (int i = 0; i < num; i++) {
-                Event event = nextEvent();
-                ProducerRecord<String, Event> record = new ProducerRecord<>(INPUT_TOPIC, "test", event);
+            int[] intervals = {0, 900, 3600, 5400, 6300};
+            Event event = nextEvent();
+            long st = event.getTimestamp();
+            for (int i = 0; i < intervals.length; i++) {
+                event.setTimestamp(st + intervals[i]);
+                Map<CharSequence, CharSequence> map = event.getValues();
+                String cs = map.get("000").toString();
+                int value = Integer.parseInt(cs) + 6;
+                map.put("000", value + "");
+                event.setValues(map);
+                ProducerRecord<String, Event> record = new ProducerRecord<>(INPUT_TOPIC, "${eventId}", event);
                 RecordMetadata metaData = producer.send(record).get();
                 // 消息发送情况
                 System.out.printf("sent record(key=%s value=%s) meta(partition=%d, offset=%d) \n",

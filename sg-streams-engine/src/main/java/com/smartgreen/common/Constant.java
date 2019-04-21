@@ -15,4 +15,9 @@ public class Constant {
     public static final String OUTPUT_TOPIC = "test-event-output-topic";
 
     public static final String SCHEMA_URL = IP + ":8081";
+
+    /**
+     * 采集程序间隔
+     */
+    public static final long INTERVAL = 900L;
 }

@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package com.micer.core.model.Event;
+package com.micer.core.event.Event;
 
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.message.BinaryMessageEncoder;
@@ -14,8 +14,8 @@ import org.apache.avro.message.SchemaStore;
 /** This is Event POJO */
 @org.apache.avro.specific.AvroGenerated
 public class Event extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 3000700175073385330L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Event\",\"namespace\":\"com.micer.core.model.Event\",\"doc\":\"This is Event POJO\",\"fields\":[{\"name\":\"deviceConfigId\",\"type\":\"string\"},{\"name\":\"deviceProtocolId\",\"type\":\"string\"},{\"name\":\"eventId\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"values\",\"type\":{\"type\":\"map\",\"values\":\"string\"}}]}");
+  private static final long serialVersionUID = -7348223204190364923L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Event\",\"namespace\":\"com.micer.core.event.Event\",\"doc\":\"This is Event POJO\",\"fields\":[{\"name\":\"deviceConfigId\",\"type\":\"string\"},{\"name\":\"deviceProtocolId\",\"type\":\"string\"},{\"name\":\"eventId\",\"type\":\"string\"},{\"name\":\"timestamp\",\"type\":\"long\"},{\"name\":\"values\",\"type\":{\"type\":\"map\",\"values\":\"string\"}}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static SpecificData MODEL$ = new SpecificData();
@@ -191,8 +191,8 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
    * Creates a new Event RecordBuilder.
    * @return A new Event RecordBuilder
    */
-  public static com.micer.core.model.Event.Event.Builder newBuilder() {
-    return new com.micer.core.model.Event.Event.Builder();
+  public static com.micer.core.event.Event.Event.Builder newBuilder() {
+    return new com.micer.core.event.Event.Event.Builder();
   }
 
   /**
@@ -200,8 +200,8 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
    * @param other The existing builder to copy.
    * @return A new Event RecordBuilder
    */
-  public static com.micer.core.model.Event.Event.Builder newBuilder(com.micer.core.model.Event.Event.Builder other) {
-    return new com.micer.core.model.Event.Event.Builder(other);
+  public static com.micer.core.event.Event.Event.Builder newBuilder(com.micer.core.event.Event.Event.Builder other) {
+    return new com.micer.core.event.Event.Event.Builder(other);
   }
 
   /**
@@ -209,8 +209,8 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
    * @param other The existing instance to copy.
    * @return A new Event RecordBuilder
    */
-  public static com.micer.core.model.Event.Event.Builder newBuilder(com.micer.core.model.Event.Event other) {
-    return new com.micer.core.model.Event.Event.Builder(other);
+  public static com.micer.core.event.Event.Event.Builder newBuilder(com.micer.core.event.Event.Event other) {
+    return new com.micer.core.event.Event.Event.Builder(other);
   }
 
   /**
@@ -234,7 +234,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(com.micer.core.model.Event.Event.Builder other) {
+    private Builder(com.micer.core.event.Event.Event.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.deviceConfigId)) {
         this.deviceConfigId = data().deepCopy(fields()[0].schema(), other.deviceConfigId);
@@ -262,7 +262,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
      * Creates a Builder by copying an existing Event instance
      * @param other The existing instance to copy.
      */
-    private Builder(com.micer.core.model.Event.Event other) {
+    private Builder(com.micer.core.event.Event.Event other) {
             super(SCHEMA$);
       if (isValidValue(fields()[0], other.deviceConfigId)) {
         this.deviceConfigId = data().deepCopy(fields()[0].schema(), other.deviceConfigId);
@@ -299,7 +299,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'deviceConfigId'.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder setDeviceConfigId(java.lang.CharSequence value) {
+    public com.micer.core.event.Event.Event.Builder setDeviceConfigId(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.deviceConfigId = value;
       fieldSetFlags()[0] = true;
@@ -319,7 +319,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'deviceConfigId' field.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder clearDeviceConfigId() {
+    public com.micer.core.event.Event.Event.Builder clearDeviceConfigId() {
       deviceConfigId = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -338,7 +338,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'deviceProtocolId'.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder setDeviceProtocolId(java.lang.CharSequence value) {
+    public com.micer.core.event.Event.Event.Builder setDeviceProtocolId(java.lang.CharSequence value) {
       validate(fields()[1], value);
       this.deviceProtocolId = value;
       fieldSetFlags()[1] = true;
@@ -358,7 +358,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'deviceProtocolId' field.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder clearDeviceProtocolId() {
+    public com.micer.core.event.Event.Event.Builder clearDeviceProtocolId() {
       deviceProtocolId = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -377,7 +377,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'eventId'.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder setEventId(java.lang.CharSequence value) {
+    public com.micer.core.event.Event.Event.Builder setEventId(java.lang.CharSequence value) {
       validate(fields()[2], value);
       this.eventId = value;
       fieldSetFlags()[2] = true;
@@ -397,7 +397,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'eventId' field.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder clearEventId() {
+    public com.micer.core.event.Event.Event.Builder clearEventId() {
       eventId = null;
       fieldSetFlags()[2] = false;
       return this;
@@ -416,7 +416,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'timestamp'.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder setTimestamp(long value) {
+    public com.micer.core.event.Event.Event.Builder setTimestamp(long value) {
       validate(fields()[3], value);
       this.timestamp = value;
       fieldSetFlags()[3] = true;
@@ -436,7 +436,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'timestamp' field.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder clearTimestamp() {
+    public com.micer.core.event.Event.Event.Builder clearTimestamp() {
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -454,7 +454,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * @param value The value of 'values'.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder setValues(java.util.Map<java.lang.CharSequence,java.lang.CharSequence> value) {
+    public com.micer.core.event.Event.Event.Builder setValues(java.util.Map<java.lang.CharSequence,java.lang.CharSequence> value) {
       validate(fields()[4], value);
       this.values = value;
       fieldSetFlags()[4] = true;
@@ -474,7 +474,7 @@ public class Event extends org.apache.avro.specific.SpecificRecordBase implement
       * Clears the value of the 'values' field.
       * @return This builder.
       */
-    public com.micer.core.model.Event.Event.Builder clearValues() {
+    public com.micer.core.event.Event.Event.Builder clearValues() {
       values = null;
       fieldSetFlags()[4] = false;
       return this;

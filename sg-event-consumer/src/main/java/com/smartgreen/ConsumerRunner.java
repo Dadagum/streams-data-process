@@ -1,12 +1,15 @@
 package com.smartgreen;
 
-import com.micer.core.model.Event.Event;
+import com.micer.core.event.Event.Event;
+import org.apache.avro.util.Utf8;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 public class ConsumerRunner {
 
@@ -16,10 +19,10 @@ public class ConsumerRunner {
 
     private static final String SCHEMA_URL = IP + ":8081";
 
-    private static final String groupId = "test-group";
+    private static final String groupId = "hongda-group";
 
-    //private static final String TOPIC = "yzemetor-test2";
-    private static final String TOPIC = "test-event-input-topic";
+    private static final String TOPIC = "test-event-output-topic";
+    //private static final String TOPIC = "test-event-input-topic";
 
     private static final Properties props = new Properties();
 
@@ -48,8 +51,10 @@ public class ConsumerRunner {
             ConsumerRecords<String, Event> data = consumer.poll(10);
             for (ConsumerRecord<String, Event> record : data) {
                 String key = record.key();
-                Event value = record.value();
-                System.out.printf("consumer get (key = %s, value = {deviceConfigId = %s, timestamp = %s})\n", key, value.getDeviceConfigId(), value.getTimestamp());
+                Event event = record.value();
+                Utf8 u = new Utf8("000");
+                String value = event.getValues().get(u).toString();
+                System.out.printf("consumer get (key = %s, value = {deviceConfigId = %s, timestamp = %s, value = %s})\n", key, event.getDeviceConfigId(), event.getTimestamp(), value);
             }
 
             // commit offset
