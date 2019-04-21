@@ -18,20 +18,23 @@ public class InterpolationUtils {
         Utf8 key = new Utf8("000");
         int preV = Integer.parseInt(start.getValues().get(key).toString());
         int currV = Integer.parseInt(end.getValues().get(key).toString());
-        int cnt = (int) ((end.getTimestamp() - start.getTimestamp()) / Constant.INTERVAL);
-        int deltaValue = (currV - preV) / cnt;
-        System.out.println("pre = " + preV + ", currV = " + currV + ", cnt = " + cnt);
-        for (int i = 1; i < cnt; i++) {
-            Event event = new Event();
-            event.setDeviceConfigId(start.getDeviceConfigId());
-            event.setDeviceProtocolId(start.getDeviceProtocolId());
-            event.setTimestamp(start.getTimestamp() + i * Constant.INTERVAL);
-            event.setEventId(start.getEventId());
-            Map<CharSequence, CharSequence> map = new HashMap<>();
-            int value = preV + deltaValue * i;
-            map.put("000", value + "");
-            event.setValues(map);
-            result.add(event);
+        System.out.println("delta = " + (end.getTimestamp() - start.getTimestamp()));
+        int cnt = Math.toIntExact((end.getTimestamp() - start.getTimestamp()) / Constant.INTERVAL);
+        if (cnt != 0) {
+            int deltaValue = (currV - preV) / cnt;
+            System.out.println("pre = " + preV + ", currV = " + currV + ", cnt = " + cnt);
+            for (int i = 1; i < cnt; i++) {
+                Event event = new Event();
+                event.setDeviceConfigId(start.getDeviceConfigId());
+                event.setDeviceProtocolId(start.getDeviceProtocolId());
+                event.setTimestamp(start.getTimestamp() + i * Constant.INTERVAL);
+                event.setEventId(start.getEventId());
+                Map<CharSequence, CharSequence> map = new HashMap<>();
+                int value = preV + deltaValue * i;
+                map.put("000", value + "");
+                event.setValues(map);
+                result.add(event);
+            }
         }
         return result;
     }

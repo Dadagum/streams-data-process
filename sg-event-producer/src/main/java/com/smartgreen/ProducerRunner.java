@@ -62,7 +62,7 @@ public class ProducerRunner {
         // 生产者配置
         KafkaProducer<String, Event> producer = new KafkaProducer<>(props);
         try {
-            int[] intervals = {0, 900, 3600, 5400, 6300};
+            int[] intervals = {0, 900000, 3600000, 5400000, 6300000};
             Event event = nextEvent();
             long st = event.getTimestamp();
             for (int i = 0; i < intervals.length; i++) {

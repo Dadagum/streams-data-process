@@ -38,6 +38,7 @@ public class InterpolationProcessor implements Processor<String, Event> {
         System.out.println("get record " + s + " -> " + curr);
         String deviceId = curr.getDeviceConfigId().toString();
         Event pre = dataStore.get(deviceId);
+        System.out.println("pre = " + pre);
         if (pre != null && curr.getTimestamp() > pre.getTimestamp()) {
             List<Event> missing = InterpolationUtils.average(pre, curr);
             for (int i = 0; i < missing.size(); i++) {

@@ -17,7 +17,7 @@ public class Constant {
     public static final String SCHEMA_URL = IP + ":8081";
 
     /**
-     * 采集程序间隔
+     * 采集程序间隔：１5min
      */
-    public static final long INTERVAL = 900L;
+    public static final int INTERVAL = 90000;
 }
