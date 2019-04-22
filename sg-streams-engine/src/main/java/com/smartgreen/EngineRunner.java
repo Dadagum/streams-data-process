@@ -39,6 +39,9 @@ public class EngineRunner {
         builder.addProcessor(InterpolationProcessor.NAME, new ProcessorSuppliers.InterpolationProcessorSupplier(), "Source");
         builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(InterpolationProcessor.DATASTORE), Serdes.String(), SerdesUtils.createEventSerde()), InterpolationProcessor.NAME);
 
+        // 记录“原始”数据topic
+        builder.addSink("Sink_Raw", Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), InterpolationProcessor.NAME);
+
         // 转为管理实体
         builder.addProcessor(Measure2ManageProcessor.NAME, new ProcessorSuppliers.Measure2ManageProcessorSupplier(), InterpolationProcessor.NAME);
 
@@ -46,11 +49,8 @@ public class EngineRunner {
         builder.addProcessor(Min15StatisticsProcessor.NAME, new ProcessorSuppliers.Min15StatisticsProcessorSupplier(), Measure2ManageProcessor.NAME);
         builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(Min15StatisticsProcessor.DATASTORE), Serdes.String(), SerdesUtils.createEventSerde()), Min15StatisticsProcessor.NAME);
 
-        // 记录“原始”数据topic
-        builder.addSink("Sink_Raw", Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), Measure2ManageProcessor.NAME);
         // 统计完能耗数据的topic
         builder.addSink("Sink_15Min", Constant.MIN_15_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), Min15StatisticsProcessor.NAME);
-
 
         // 根据已经创建完的拓扑结构和配置开启streams程序
         final KafkaStreams streams = new KafkaStreams(builder, props);

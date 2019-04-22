@@ -8,7 +8,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 public class ConsumerRunner{
@@ -21,9 +23,9 @@ public class ConsumerRunner{
 
     private static final String groupId = "hongda-group";
 
-   // private static final String TOPIC = "test-event-output-topic";
-    //private static final String TOPIC = "min-15-output-topic";
-    private static final String TOPIC = "test-event-input-topic2";
+    public static final String RAW_OUTPUT_TOPIC = "test-event-output-topic";
+
+    public static final String MIN_15_TOPIC = "min-15-output-topic";
 
     private static final Properties props = new Properties();
 
@@ -45,7 +47,10 @@ public class ConsumerRunner{
 
     public static void main(String[] args) {
         KafkaConsumer<String, Event> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Collections.singletonList(TOPIC));
+        List<String> topics = new ArrayList<>();
+        topics.add(RAW_OUTPUT_TOPIC);
+        topics.add(MIN_15_TOPIC);
+        consumer.subscribe(topics);
         EntityService service = new EntityService();
 
         while (true) {
@@ -55,7 +60,7 @@ public class ConsumerRunner{
                 Event event = record.value();
                 Utf8 u = new Utf8("000");
                 String value = event.getValues().get(u).toString();
-                System.out.printf("consumer get (key = %s, value = {deviceConfigId = %s, timestamp = %s, value = %s})\n", key, event.getDeviceConfigId(), event.getTimestamp(), value);
+                System.out.printf("consumer get (key = %s, value = {deviceConfigId = %s, timestamp = %s, value = %s} from topic : %s)\n", key, event.getDeviceConfigId(), event.getTimestamp(), value, record.topic());
 
                 //持久化到数据库
                 service.saveEntity(event);
