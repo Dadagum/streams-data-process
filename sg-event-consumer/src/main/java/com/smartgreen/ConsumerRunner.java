@@ -1,6 +1,8 @@
 package com.smartgreen;
 
 import com.micer.core.event.Event.Event;
+import com.smartgreen.model.Entity;
+import com.smartgreen.service.EntityService;
 import org.apache.avro.util.Utf8;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -9,7 +11,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import java.util.Collections;
 import java.util.Properties;
 
-public class ConsumerRunner {
+public class ConsumerRunner{
 
     private static final String IP = "http://127.0.0.1";
 
@@ -20,7 +22,8 @@ public class ConsumerRunner {
     private static final String groupId = "hongda-group";
 
    // private static final String TOPIC = "test-event-output-topic";
-    private static final String TOPIC = "min-15-output-topic";
+    //private static final String TOPIC = "min-15-output-topic";
+    private static final String TOPIC = "test-event-input-topic2";
 
     private static final Properties props = new Properties();
 
@@ -41,9 +44,9 @@ public class ConsumerRunner {
 
 
     public static void main(String[] args) {
-        System.out.println("consumer start...");
         KafkaConsumer<String, Event> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Collections.singletonList(TOPIC));
+        EntityService service = new EntityService();
 
         while (true) {
             ConsumerRecords<String, Event> data = consumer.poll(10);
@@ -53,10 +56,13 @@ public class ConsumerRunner {
                 Utf8 u = new Utf8("000");
                 String value = event.getValues().get(u).toString();
                 System.out.printf("consumer get (key = %s, value = {deviceConfigId = %s, timestamp = %s, value = %s})\n", key, event.getDeviceConfigId(), event.getTimestamp(), value);
-            }
 
+                //持久化到数据库
+                service.saveEntity(event);
+            }
             // commit offset
             consumer.commitAsync();
         }
     }
+
 }

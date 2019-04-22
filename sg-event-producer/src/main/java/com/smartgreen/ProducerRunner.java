@@ -44,7 +44,7 @@ public class ProducerRunner {
     private static Event nextEvent() {
         Event event = new Event();
         event.setEventId(UUIDUtils.get());
-        event.setDeviceConfigId("QT001");
+        event.setDeviceConfigId("YZ001");
         event.setDeviceProtocolId("011001");
         long timestamp = System.currentTimeMillis();
         event.setTimestamp(timestamp);
