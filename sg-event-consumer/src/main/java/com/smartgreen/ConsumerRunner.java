@@ -1,7 +1,6 @@
 package com.smartgreen;
 
-import com.micer.core.event.Event.Event;
-import com.smartgreen.model.Entity;
+import com.micer.core.event.Event;
 import com.smartgreen.service.EntityService;
 import org.apache.avro.util.Utf8;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -9,7 +8,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 

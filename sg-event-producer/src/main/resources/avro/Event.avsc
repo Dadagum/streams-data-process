@@ -1,4 +1,4 @@
-{"namespace": "com.micer.core.event.Event",
+{"namespace": "com.micer.core.event",
   "type": "record",
   "name": "Event",
   "doc": "This is Event POJO",

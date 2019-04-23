@@ -1,6 +1,6 @@
 package com.smartgreen;
 
-import com.micer.core.event.Event.Event;
+import com.micer.core.event.Event;
 import com.smartgreen.utils.UUIDUtils;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;

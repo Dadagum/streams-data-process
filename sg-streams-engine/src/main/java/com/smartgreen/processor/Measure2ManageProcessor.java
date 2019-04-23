@@ -1,6 +1,6 @@
 package com.smartgreen.processor;
 
-import com.micer.core.event.Event.Event;
+import com.micer.core.event.Event;
 import com.smartgreen.model.ManageEntity;
 import com.smartgreen.model.ManageEntityFormula;
 import org.apache.kafka.streams.processor.Processor;

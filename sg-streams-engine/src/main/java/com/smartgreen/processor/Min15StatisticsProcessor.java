@@ -1,6 +1,6 @@
 package com.smartgreen.processor;
 
-import com.micer.core.event.Event.Event;
+import com.micer.core.event.Event;
 import org.apache.avro.util.Utf8;
 import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorContext;

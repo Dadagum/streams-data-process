@@ -1,7 +1,7 @@
 package com.smartgreen.common;
 
 
-import com.micer.core.event.Event.Event;
+import com.micer.core.event.Event;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroDeserializer;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerializer;

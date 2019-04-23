@@ -1,6 +1,6 @@
 package com.smartgreen.common;
 
-import com.micer.core.event.Event.Event;
+import com.micer.core.event.Event;
 import com.smartgreen.processor.InterpolationProcessor;
 import com.smartgreen.processor.Measure2ManageProcessor;
 import com.smartgreen.processor.Min15StatisticsProcessor;

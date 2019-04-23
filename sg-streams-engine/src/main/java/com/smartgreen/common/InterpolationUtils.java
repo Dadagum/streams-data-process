@@ -1,6 +1,6 @@
 package com.smartgreen.common;
 
-import com.micer.core.event.Event.Event;
+import com.micer.core.event.Event;
 import org.apache.avro.util.Utf8;
 
 import java.util.ArrayList;

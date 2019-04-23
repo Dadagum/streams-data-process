@@ -10,7 +10,8 @@ public class Constant {
 
     public static final String CLIENT_ID = "interpolation-processor-client";
 
-    public static final String INPUT_TOPIC = "test-event-input-topic2";
+    //public static final String INPUT_TOPIC = "test-event-input-topic2";
+    public static final String INPUT_TOPIC = "yzemetor-test2";
 
     /**
      * 记录“原始数据”的topic

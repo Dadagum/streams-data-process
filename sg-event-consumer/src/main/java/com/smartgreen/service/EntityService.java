@@ -1,6 +1,6 @@
 package com.smartgreen.service;
 
-import com.micer.core.event.Event.Event;
+import com.micer.core.event.Event;
 import com.smartgreen.model.Entity;
 import com.smartgreen.mybatis.mapper.EntityMapper;
 import com.smartgreen.mybatis.mybatis.MyBatisUtil;
