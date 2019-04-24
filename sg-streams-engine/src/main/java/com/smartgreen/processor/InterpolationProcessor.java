@@ -1,14 +1,13 @@
 package com.smartgreen.processor;
 
 import com.micer.core.event.Event;
-import com.smartgreen.common.InterpolationUtils;
+import com.smartgreen.common.utils.InterpolationUtil;
 import com.smartgreen.model.Entity;
 import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.KeyValueStore;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class InterpolationProcessor implements Processor<String, Event> {
 
@@ -17,8 +16,6 @@ public class InterpolationProcessor implements Processor<String, Event> {
     public static final String DATASTORE = "rawDataStore";
 
     private ProcessorContext context; // 可以的得到流处理的上下文，init()函数中必须赋值
-
-    private static final AtomicInteger counter = new AtomicInteger(1);
 
     private KeyValueStore<String, Entity> dataStore;
 
@@ -36,9 +33,9 @@ public class InterpolationProcessor implements Processor<String, Event> {
         Entity pre = dataStore.get(uuid);
         System.out.println("pre = " + pre);
         // 实体的转换
-        Entity curr = InterpolationUtils.convert(event);
+        Entity curr = InterpolationUtil.convert(event);
         if (pre != null && curr.getRunAt() > pre.getRunAt()) {
-            List<Entity> missing = InterpolationUtils.average(pre, curr);
+            List<Entity> missing = InterpolationUtil.average(pre, curr);
             for (int i = 0; i < missing.size(); i++) {
                 System.out.println("adding : " + missing.get(i));
                 context.forward(uuid, missing.get(i));

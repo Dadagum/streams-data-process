@@ -11,7 +11,7 @@ import org.apache.kafka.common.serialization.Serde;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SerdesUtils {
+public class SerdesUtil {
 
     public static final SpecificAvroSerializer<Event> createEventSerializer() {
         SpecificAvroSerializer<Event> deserializer = new SpecificAvroSerializer<>();
@@ -34,8 +34,6 @@ public class SerdesUtils {
         serde.configure(config, false);
         return serde;
     }
-
-
 
     private static Map<String, String> createSerdeConfig() {
         Map<String, String> config = new HashMap<>();

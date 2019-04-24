@@ -1,8 +1,8 @@
 package com.smartgreen;
 
-import com.smartgreen.common.Constant;
-import com.smartgreen.common.ProcessorSuppliers;
-import com.smartgreen.common.SerdesUtils;
+import com.smartgreen.common.constant.Constant;
+import com.smartgreen.common.suppliers.ProcessorSuppliers;
+import com.smartgreen.common.utils.SerdesUtil;
 import com.smartgreen.processor.InterpolationProcessor;
 import com.smartgreen.processor.Measure2ManageProcessor;
 import com.smartgreen.processor.Min15StatisticsProcessor;
@@ -33,24 +33,24 @@ public class EngineRunner {
     public static void main(String[] args) {
         Topology builder = new Topology();
         // 增加source processor
-        builder.addSource("Source", new StringDeserializer(), SerdesUtils.createEventDeserializer(), Constant.INPUT_TOPIC);
+        builder.addSource("Source", new StringDeserializer(), SerdesUtil.createEventDeserializer(), Constant.INPUT_TOPIC);
         // 建立拓扑结构
         // 插值处理
         builder.addProcessor(InterpolationProcessor.NAME, new ProcessorSuppliers.InterpolationProcessorSupplier(), "Source");
-        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(InterpolationProcessor.DATASTORE), Serdes.String(), SerdesUtils.createEventSerde()), InterpolationProcessor.NAME);
+        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(InterpolationProcessor.DATASTORE), Serdes.String(), SerdesUtil.createEventSerde()), InterpolationProcessor.NAME);
 
         // 记录“原始”数据topic
-        builder.addSink("Sink_Raw", Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), InterpolationProcessor.NAME);
+        builder.addSink("Sink_Raw", Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), SerdesUtil.createEventSerializer(), InterpolationProcessor.NAME);
 
         // 转为管理实体
         builder.addProcessor(Measure2ManageProcessor.NAME, new ProcessorSuppliers.Measure2ManageProcessorSupplier(), InterpolationProcessor.NAME);
 
         // 每15min统计一次能耗
         builder.addProcessor(Min15StatisticsProcessor.NAME, new ProcessorSuppliers.Min15StatisticsProcessorSupplier(), Measure2ManageProcessor.NAME);
-        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(Min15StatisticsProcessor.DATASTORE), Serdes.String(), SerdesUtils.createEventSerde()), Min15StatisticsProcessor.NAME);
+        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(Min15StatisticsProcessor.DATASTORE), Serdes.String(), SerdesUtil.createEventSerde()), Min15StatisticsProcessor.NAME);
 
         // 统计完能耗数据的topic
-        builder.addSink("Sink_15Min", Constant.MIN_15_TOPIC, new StringSerializer(), SerdesUtils.createEventSerializer(), Min15StatisticsProcessor.NAME);
+        builder.addSink("Sink_15Min", Constant.MIN_15_TOPIC, new StringSerializer(), SerdesUtil.createEventSerializer(), Min15StatisticsProcessor.NAME);
 
         // 根据已经创建完的拓扑结构和配置开启streams程序
         final KafkaStreams streams = new KafkaStreams(builder, props);

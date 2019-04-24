@@ -8,7 +8,7 @@ import org.apache.avro.util.Utf8;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterpolationUtils {
+public class InterpolationUtil {
 
     /**
      * 和采集端商量好的从values中取出来的key
