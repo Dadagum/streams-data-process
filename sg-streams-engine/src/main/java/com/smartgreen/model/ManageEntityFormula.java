@@ -1,7 +1,12 @@
 package com.smartgreen.model;
 
+/**
+ * @Description TODO
+ * @Author Honda
+ * @Date 2019/4/24 16:45
+ **/
+
 import java.util.List;
-import java.util.Map;
 
 /**
  * 计量实体到管理实体的转换表

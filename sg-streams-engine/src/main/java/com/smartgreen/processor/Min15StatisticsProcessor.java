@@ -13,6 +13,7 @@ import java.util.Map;
 /**
  * 每15min统计一次能耗
  */
+@Deprecated
 public class Min15StatisticsProcessor implements Processor<String, Event> {
 
     public static final String NAME = "min15statistics-processor";

@@ -2,6 +2,7 @@ package com.smartgreen.processor;
 
 import com.micer.core.event.Event;
 import com.smartgreen.common.InterpolationUtils;
+import com.smartgreen.model.Entity;
 import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.KeyValueStore;
@@ -19,35 +20,32 @@ public class InterpolationProcessor implements Processor<String, Event> {
 
     private static final AtomicInteger counter = new AtomicInteger(1);
 
-    private String processorName;
-
-    private KeyValueStore<String, Event> dataStore;
-
-    public InterpolationProcessor(String name) {
-        this.processorName = name + "-" + counter.getAndIncrement();
-    }
+    private KeyValueStore<String, Entity> dataStore;
 
     @Override
     public void init(ProcessorContext context) {
         this.context = context;
-        dataStore = (KeyValueStore<String, Event>) context.getStateStore(DATASTORE);
+        dataStore = (KeyValueStore<String, Entity>) context.getStateStore(DATASTORE);
     }
 
     @Override
-    public void process(String s, Event curr) {
-        System.out.println("get record " + s + " -> " + curr);
-        String deviceId = curr.getDeviceConfigId().toString();
-        Event pre = dataStore.get(deviceId);
+    public void process(String s, Event event) {
+        System.out.println("get record " + s + " -> " + event);
+        // 得到前一条数据
+        String uuid = event.getDeviceConfigId().toString();
+        Entity pre = dataStore.get(uuid);
         System.out.println("pre = " + pre);
-        if (pre != null && curr.getTimestamp() > pre.getTimestamp()) {
-            List<Event> missing = InterpolationUtils.average(pre, curr);
+        // 实体的转换
+        Entity curr = InterpolationUtils.convert(event);
+        if (pre != null && curr.getRunAt() > pre.getRunAt()) {
+            List<Entity> missing = InterpolationUtils.average(pre, curr);
             for (int i = 0; i < missing.size(); i++) {
                 System.out.println("adding : " + missing.get(i));
-                context.forward(deviceId, missing.get(i));
+                context.forward(uuid, missing.get(i));
             }
         }
-        dataStore.put(deviceId, curr);
-        context.forward(s, curr);
+        dataStore.put(uuid, curr);
+        context.forward(uuid, curr);
         context.commit();
     }
 

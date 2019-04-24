@@ -1,0 +1,13 @@
+{"namespace": "com.smartgreen.model",
+  "type": "record",
+  "name": "Entity",
+  "doc": "This is Entity POJO",
+  "fields": [
+    {"name": "id", "type": "int"},
+    {"name": "uuid", "type": "string"},
+    {"name": "value", "type": "double"},
+    {"name": "runAt",  "type": "long"},
+    {"name": "original",  "type": "boolean"},
+    {"name": "anomaly",  "type": "boolean"}
+  ]
+}

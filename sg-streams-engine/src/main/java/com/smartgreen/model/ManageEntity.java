@@ -3,8 +3,10 @@ package com.smartgreen.model;
 import java.util.Map;
 
 /**
- * 计量实体
- */
+ * @Description TODO
+ * @Author Honda
+ * @Date 2019/4/24 16:45
+ **/
 public class ManageEntity {
 
     private String uuid;

@@ -15,6 +15,7 @@ import java.util.Map;
  * 计量实体转换为管理实体的Processor
  * 现在为测试时期，只有一个设备
  */
+@Deprecated
 public class Measure2ManageProcessor implements Processor<String, Event> {
 
     public static final String NAME = "measure2manage-processor";
