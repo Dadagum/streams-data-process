@@ -1,13 +1,12 @@
-package com.smartgreen.common;
+package com.smartgreen.common.utils;
 
 import com.micer.core.event.Event;
+import com.smartgreen.common.constant.Constant;
 import com.smartgreen.model.Entity;
 import org.apache.avro.util.Utf8;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class InterpolationUtils {
 

@@ -1,4 +1,4 @@
-package com.smartgreen.common;
+package com.smartgreen.common.suppliers;
 
 import com.micer.core.event.Event;
 import com.smartgreen.processor.InterpolationProcessor;
@@ -17,10 +17,11 @@ public class ProcessorSuppliers {
 
         @Override
         public Processor<String, Event> get() {
-            return new InterpolationProcessor(InterpolationProcessor.NAME);
+            return new InterpolationProcessor();
         }
     }
 
+    @Deprecated
     public static class Measure2ManageProcessorSupplier implements ProcessorSupplier<String, Event> {
 
         @Override
@@ -29,7 +30,7 @@ public class ProcessorSuppliers {
         }
     }
 
-
+    @Deprecated
     public static class Min15StatisticsProcessorSupplier implements ProcessorSupplier<String, Event> {
 
         @Override

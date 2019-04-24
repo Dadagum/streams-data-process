@@ -1,4 +1,4 @@
-package com.smartgreen.common;
+package com.smartgreen.common.constant;
 
 public class Constant {
 
