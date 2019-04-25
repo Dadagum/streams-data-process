@@ -11,25 +11,21 @@ public class Constant {
     public static final String CLIENT_ID = "interpolation-processor-client";
     public static final String SCHEMA_URL = IP + ":8081";
 
-    //public static final String INPUT_TOPIC = "test-event-input-topic2";
     /**
      * Source Topic
      */
     public static final String INPUT_TOPIC = "yzemeter-test2";
-
-    /**
-     * Debug Topic
-     */
-    public static final String RAW_OUTPUT_TOPIC = "test-event-output-topic";
+    //public static final String INPUT_TOPIC = "test-event-input-topic2";
 
     /**
      * Sink Topic
      */
-    public static final String MIN_15_TOPIC = "min-15-output-topic";
-    public static final String OUPUT_HOUR_TOPIC = "yzemeter-hour-topic";
-    public static final String OUPUT_DAY_TOPIC = "yzemeter-day-topic";
-    public static final String OUPUT_MONTH_TOPIC = "yzemeter-month-topic";
-    public static final String OUPUT_YEAR_TOPIC = "yzemeter-year-topic";
+//    public static final String MIN_15_TOPIC = "min-15-output-topic";
+    public static final String OUTPUT_HOUR_TOPIC = "yzemeter-hour-topic";
+    public static final String OUTPUT_DAY_TOPIC = "yzemeter-day-topic";
+    public static final String OUTPUT_MONTH_TOPIC = "yzemeter-month-topic";
+    public static final String OUTPUT_YEAR_TOPIC = "yzemeter-year-topic";
+    public static final String RAW_OUTPUT_TOPIC = "test-event-output-topic";
 
     /**
      * Source Processor
@@ -43,6 +39,7 @@ public class Constant {
     public static final String SINK_DAY_PROCESSOR = "sink-day-processor";
     public static final String SINK_MONTH_PROCESSOR = "sink-month-processor";
     public static final String SINK_YEAR_PROCESSOR = "sink-year-processor";
+    public static final String SINK_RAW_PROCESSOR = "sink-raw-processor";
 
 
     /**

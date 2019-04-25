@@ -1,11 +1,12 @@
 package com.smartgreen;
 
 import com.smartgreen.common.constant.Constant;
+import com.smartgreen.common.serdes.EntitySerdes;
 import com.smartgreen.common.suppliers.ProcessorSuppliers;
-import com.smartgreen.common.utils.SerdesUtil;
+import com.smartgreen.common.serdes.EventSerdes;
+import com.smartgreen.model.Entity;
 import com.smartgreen.processor.InterpolationProcessor;
-import com.smartgreen.processor.Measure2ManageProcessor;
-import com.smartgreen.processor.Min15StatisticsProcessor;
+import com.smartgreen.processor.TimeAggregationProcessor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -31,26 +32,27 @@ public class EngineRunner {
     }
 
     public static void main(String[] args) {
-        Topology builder = new Topology();
-        // 增加source processor
-        builder.addSource("Source", new StringDeserializer(), SerdesUtil.createEventDeserializer(), Constant.INPUT_TOPIC);
         // 建立拓扑结构
+        Topology builder = new Topology();
+        // SOURCE PROCESSOR
+        builder.addSource(Constant.SOURCE_PROCESSOR, new StringDeserializer(), EventSerdes.deserializer(), Constant.INPUT_TOPIC);
         // 插值处理
-        builder.addProcessor(InterpolationProcessor.NAME, new ProcessorSuppliers.InterpolationProcessorSupplier(), "Source");
-        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(InterpolationProcessor.DATASTORE), Serdes.String(), SerdesUtil.createEventSerde()), InterpolationProcessor.NAME);
-
-        // 记录“原始”数据topic
-        builder.addSink("Sink_Raw", Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), SerdesUtil.createEventSerializer(), InterpolationProcessor.NAME);
-
-        // 转为管理实体
-        builder.addProcessor(Measure2ManageProcessor.NAME, new ProcessorSuppliers.Measure2ManageProcessorSupplier(), InterpolationProcessor.NAME);
-
-        // 每15min统计一次能耗
-        builder.addProcessor(Min15StatisticsProcessor.NAME, new ProcessorSuppliers.Min15StatisticsProcessorSupplier(), Measure2ManageProcessor.NAME);
-        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.inMemoryKeyValueStore(Min15StatisticsProcessor.DATASTORE), Serdes.String(), SerdesUtil.createEventSerde()), Min15StatisticsProcessor.NAME);
-
-        // 统计完能耗数据的topic
-        builder.addSink("Sink_15Min", Constant.MIN_15_TOPIC, new StringSerializer(), SerdesUtil.createEventSerializer(), Min15StatisticsProcessor.NAME);
+        builder.addProcessor(InterpolationProcessor.NAME, new ProcessorSuppliers.InterpolationProcessorSupplier(), Constant.SOURCE_PROCESSOR);
+        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(InterpolationProcessor.DATASTORE), Serdes.String(), EntitySerdes.serde()), InterpolationProcessor.NAME);
+        // 分时处理
+        builder.addProcessor(TimeAggregationProcessor.NAME, new ProcessorSuppliers.TimeAggregationProcessorSupplier(), InterpolationProcessor.NAME);
+        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(TimeAggregationProcessor.HOUR_DS), Serdes.String(), EntitySerdes.serde()), TimeAggregationProcessor.NAME);
+        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(TimeAggregationProcessor.DAY_DS), Serdes.String(), EntitySerdes.serde()), TimeAggregationProcessor.NAME);
+        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(TimeAggregationProcessor.MONTH_DS), Serdes.String(), EntitySerdes.serde()), TimeAggregationProcessor.NAME);
+        builder.addStateStore(Stores.keyValueStoreBuilder(Stores.persistentKeyValueStore(TimeAggregationProcessor.YEAR_DS), Serdes.String(), EntitySerdes.serde()), TimeAggregationProcessor.NAME);
+        // SINK PROCESSOR
+        // 记录插值完的数据
+        builder.addSink(Constant.SINK_RAW_PROCESSOR, Constant.RAW_OUTPUT_TOPIC, new StringSerializer(), EventSerdes.serializer(), InterpolationProcessor.NAME);
+        // 分时数据
+        builder.addSink(Constant.SINK_HOUR_PROCESSOR, Constant.OUTPUT_HOUR_TOPIC, new StringSerializer(), EventSerdes.serializer(), TimeAggregationProcessor.NAME);
+        builder.addSink(Constant.SINK_DAY_PROCESSOR, Constant.OUTPUT_DAY_TOPIC, new StringSerializer(), EventSerdes.serializer(), TimeAggregationProcessor.NAME);
+        builder.addSink(Constant.SINK_MONTH_PROCESSOR, Constant.OUTPUT_MONTH_TOPIC, new StringSerializer(), EventSerdes.serializer(), TimeAggregationProcessor.NAME);
+        builder.addSink(Constant.SINK_YEAR_PROCESSOR, Constant.OUTPUT_YEAR_TOPIC, new StringSerializer(), EventSerdes.serializer(), TimeAggregationProcessor.NAME);
 
         // 根据已经创建完的拓扑结构和配置开启streams程序
         final KafkaStreams streams = new KafkaStreams(builder, props);
