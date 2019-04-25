@@ -16,6 +16,16 @@ public class TimeUtil {
      */
     public static final long DELTA = 576000000L;
 
+    public static boolean isNewPeriod(long time, TimeType type) {
+        switch (type) {
+            case YEAR: return isNewYear(time);
+            case MONTH: return isNewMonth(time);
+            case HOUR: return isNewHour(time);
+            case DAY: return isNewDay(time);
+        }
+        throw new RuntimeException("addition time type");
+    }
+
     public static boolean isNewHour(long time) {
         return time % HOUR_MS == 0;
     }

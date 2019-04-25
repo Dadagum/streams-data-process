@@ -42,20 +42,27 @@ public class TimeAggregationProcessor implements Processor<String, Entity> {
 
     @Override
     public void process(String s, Entity entity) {
-
+        aggregation(entity, TimeType.HOUR, Constant.SINK_HOUR_PROCESSOR, hourDataStore); // 小时维度
+        aggregation(entity, TimeType.DAY, Constant.SINK_DAY_PROCESSOR, dayDataStore); // 天维度
+        aggregation(entity, TimeType.MONTH, Constant.SINK_MONTH_PROCESSOR, monthDataStore); // 月维度
+        aggregation(entity, TimeType.YEAR, Constant.SINK_YEAR_PROCESSOR, yearDataStore); // 年维度
     }
 
     /**
      * TODO 需要确定业务规则
-     * 分时聚合
+     * 针对某一个周期的分时聚合
+     * @param curr 当前时间
+     * @param type 分时类型
+     * @param childName 需要传递给下游的节点名称
+     * @param dataStore 对应分时处理的dataStore
      */
-    private void hour(Entity curr) {
-        Entity pre = hourDataStore.get(curr.getUuid().toString());
+    private void aggregation(Entity curr, TimeType type, String childName, KeyValueStore<String, Entity> dataStore) {
+        Entity pre = dataStore.get(curr.getUuid().toString());
         double value = 0d; // 记录能耗
         if (pre != null) {
             value = curr.getValue() - pre.getValue();
         } else {
-            long preRunAt = TimeUtil.getOriginalTimestamp(curr.getRunAt(), TimeType.DAY);
+            long preRunAt = TimeUtil.getOriginalTimestamp(curr.getRunAt(), type);
             pre = Entity.newBuilder()
                     .setUuid(curr.getUuid())
                     .setValue(curr.getValue())
@@ -66,7 +73,7 @@ public class TimeAggregationProcessor implements Processor<String, Entity> {
                     .build();
         }
         // 检查是否为整时
-        if (!TimeUtil.isNewDay(curr.getRunAt())) {
+        if (!TimeUtil.isNewPeriod(curr.getRunAt(), type)) {
             // 保留原来的一切信息（时间戳，值，是否插值，业务错误）
             curr.setRunAt(pre.getRunAt());
             curr.setValue(pre.getValue());
@@ -77,26 +84,10 @@ public class TimeAggregationProcessor implements Processor<String, Entity> {
         // 记录更新能耗值
         pre.setValue(value);
         // 传给下游的相对应的processor
-        context.forward(pre.getUuid().toString(), pre, Constant.SINK_HOUR_PROCESSOR);
+        context.forward(pre.getUuid().toString(), pre, childName);
     }
-
-
-    private void day(Entity entity) {
-
-    }
-
-    private void month(Entity entity) {
-
-    }
-
-    private void year(Entity entity) {
-
-    }
-
 
     @Override
     public void close() {
     }
-
-
 }
