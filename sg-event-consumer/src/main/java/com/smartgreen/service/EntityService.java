@@ -1,6 +1,7 @@
 package com.smartgreen.service;
 
 import com.micer.core.event.Event;
+import com.smartgreen.ConsumerRunner;
 import com.smartgreen.model.Entity;
 import com.smartgreen.mybatis.mapper.EntityMapper;
 import com.smartgreen.mybatis.mybatis.MyBatisUtil;
@@ -13,25 +14,23 @@ import java.util.Map;
 public class EntityService {
 
     /**
-     * 测试阶段，只有几个实体，直接在这里记录分时后的实体和数据表名的关系
-     * key   : uuid
-     * value : tableName
+     * 记录topic对应数据库tableName
      */
     private static final Map<String, String> mapping = new HashMap<>();
 
     static {
-        mapping.put("ZHJZ001", "d_project_15min_t");
-        mapping.put("SCUTb5", "d_building_15min_t");
-        mapping.put("SCUTb5_f9", "d_floor_15min_t");
-        mapping.put("SCUTb5_902", "d_room_15min_t");
-        mapping.put("YZ001", "d_emeter_raw_t");
+        mapping.put(ConsumerRunner.OUTPUT_HOUR_TOPIC, "d_emeter_hour_t");
+        mapping.put(ConsumerRunner.OUTPUT_DAY_TOPIC, "d_emeter_day_t");
+        mapping.put(ConsumerRunner.OUTPUT_MONTH_TOPIC, "d_emeter_month_t");
+        mapping.put(ConsumerRunner.OUTPUT_YEAR_TOPIC, "d_emeter_year_t");
+        mapping.put(ConsumerRunner.RAW_OUTPUT_TOPIC, "d_emeter_raw_t");
     }
 
-    public void saveEntity(Entity entity) {
+    public void saveEntity(Entity entity, String topicName) {
         SqlSession session = MyBatisUtil.getSession();
         try {
             EntityMapper mapper = session.getMapper(EntityMapper.class);
-            String tableName = mapping.get(entity.getUuid());
+            String tableName = mapping.get(topicName);
             mapper.insertOne(entity, tableName);
             session.commit();
         } finally {
@@ -39,19 +38,8 @@ public class EntityService {
         }
     }
 
+    @Deprecated
     public void saveEntity(Event event) {
-        Entity entity = new Entity();
-        entity.setAnomaly(false);
-        entity.setOriginal(true);
-        entity.setRunAt(event.getTimestamp());
-        entity.setUuid(event.getDeviceConfigId().toString());
-
-        Utf8 u = new Utf8("000");
-        int value = Integer.parseInt(event.getValues().get(u).toString());
-        // 实际度数为0.1
-        entity.setValue(value * 0.1);
-
-        saveEntity(entity);
 
     }
 }
