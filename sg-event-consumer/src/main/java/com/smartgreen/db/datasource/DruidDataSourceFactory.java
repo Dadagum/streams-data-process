@@ -1,4 +1,4 @@
-package com.smartgreen.mybatis;
+package com.smartgreen.db.datasource;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.datasource.DataSourceFactory;

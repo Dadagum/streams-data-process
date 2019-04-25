@@ -6,8 +6,12 @@
     <!-- 数据库配置文件 -->
     <properties resource="mybatis/db.properties"/>
 
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
     <typeAliases>
-        <typeAlias type="com.smartgreen.mybatis.DruidDataSourceFactory" alias="DRUID"/>
+        <typeAlias type="com.smartgreen.db.datasource.DruidDataSourceFactory" alias="DRUID"/>
         <typeAlias type="com.smartgreen.model.Entity" alias="Entity"/>
     </typeAliases>
 

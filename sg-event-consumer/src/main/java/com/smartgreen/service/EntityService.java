@@ -1,45 +1,57 @@
 package com.smartgreen.service;
 
-import com.micer.core.event.Event;
-import com.smartgreen.ConsumerRunner;
 import com.smartgreen.model.Entity;
-import com.smartgreen.mybatis.mapper.EntityMapper;
-import com.smartgreen.mybatis.mybatis.MyBatisUtil;
-import org.apache.avro.util.Utf8;
-import org.apache.ibatis.session.SqlSession;
+import com.smartgreen.db.EntityDao;
+import com.smartgreen.db.table.Tables;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+/**
+ * @Description 实体相关的业务处理
+ * @Author Honda
+ * @Date 2019/4/25 15:08
+ **/
 public class EntityService {
 
     /**
-     * 记录topic对应数据库tableName
+     * 记录topic到数据表
      */
-    private static final Map<String, String> mapping = new HashMap<>();
+    private static final Map<String, Integer> map = new HashMap<>(5);
 
     static {
-        mapping.put(ConsumerRunner.OUTPUT_HOUR_TOPIC, "d_emeter_hour_t");
-        mapping.put(ConsumerRunner.OUTPUT_DAY_TOPIC, "d_emeter_day_t");
-        mapping.put(ConsumerRunner.OUTPUT_MONTH_TOPIC, "d_emeter_month_t");
-        mapping.put(ConsumerRunner.OUTPUT_YEAR_TOPIC, "d_emeter_year_t");
-        mapping.put(ConsumerRunner.RAW_OUTPUT_TOPIC, "d_emeter_raw_t");
-    }
-
-    public void saveEntity(Entity entity, String topicName) {
-        SqlSession session = MyBatisUtil.getSession();
-        try {
-            EntityMapper mapper = session.getMapper(EntityMapper.class);
-            String tableName = mapping.get(topicName);
-            mapper.insertOne(entity, tableName);
-            session.commit();
-        } finally {
-            session.close();
-        }
-    }
-
-    @Deprecated
-    public void saveEntity(Event event) {
 
     }
+
+    private EntityDao entityDao;
+
+    public EntityService(EntityDao entityDao) {
+        this.entityDao = entityDao;
+    }
+
+    /**
+     * 将计量实体记录在数据表中
+     * @param entity 计量实体数据
+     * @param topicName 数据来自的topic
+     */
+    public void saveEmeterEntity(Entity entity, String topicName) {
+        String tableName = Tables.getTableName(topicName);
+        saveEntity(entity, tableName);
+    }
+
+    /**
+     * 将实体保存在数据表中
+     */
+    public void saveEntity(Entity entity, String tableName) {
+        entityDao.saveEntity(entity, tableName);
+    }
+
+    /**
+     * 在数据表中获取某一批次的实体数据
+     */
+    public List<Entity> getListAt(long timestamp, String tableName) {
+        return entityDao.getListAt(timestamp, tableName);
+    }
+
 }
